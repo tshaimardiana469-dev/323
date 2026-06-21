@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFSETH - Financial Information Consultancy</title>
+    <style>
+        /* Global Variables & Base Styles */
+        :root {
+            --main-bg: #FFF9F0;
+            --secondary-pink: #FFB6C1;
+            --secondary-blue: #87CEFA;
+            --secondary-mint: #98FB98;
+            --accent-gold: #FFD700;
+            --accent-purple: #DA70D6;
+            --text-dark: #2c2c2c;
+            --shadow: 0 4px 16px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        button, input, textarea {
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Side Float Ads */
+        .side-ad {
+            position: fixed;
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 12px;
+            z-index: 99;
+            cursor: move;
+        }
+        .ad-left {
+            left: 10px;
+            top: 30%;
+        }
+        .ad-right {
+            right: 10px;
+            top: 30%;
+        }
+        .ad-close {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            background: var(--secondary-pink);
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ad-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .ad-text {
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        @media(max-width: 992px) {
+            .side-ad {
+                display: none;
+            }
+        }
+
+        /* Header & Navigation */
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--secondary-blue));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        nav ul {
+            display: flex;
+            gap: 32px;
+        }
+        .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .nav-link:hover {
+            background: var(--secondary-blue);
+            color: white;
+        }
+        .mobile-menu-btn {
+            display: none;
+            font-size: 26px;
+            background: transparent;
+        }
+        @media(max-width: 768px) {
+            nav ul {
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                gap: 16px;
+                box-shadow: var(--shadow);
+                transform: translateX(-100%);
+                transition: var(--transition);
+            }
+            nav ul.active {
+                transform: translateX(0);
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Section Base Style */
+        section {
+            min-height: 100vh;
+            padding: 80px 0;
+            display: none;
+        }
+        section.active {
+            display: block;
+        }
+        .section-title {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--accent-purple);
+        }
+        .section-desc {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        /* Hero Section - Home */
+        #home {
+            background: linear-gradient(135deg, var(--main-bg), #fff, var(--secondary-blue) 300%);
+        }
+        .hero-img-wrap {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .hero-img {
+            max-width: 85%;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+        .color-card-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+        }
+        .color-card {
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+        }
+        .card-pink { background: rgba(255, 182, 193, 0.25); }
+        .card-blue { background: rgba(135, 206, 250, 0.25); }
+        .card-mint { background: rgba(152, 251, 152, 0.25); }
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--accent-purple);
+        }
+        .card p {
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .gold-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--accent-gold);
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+
+        /* About Us Section */
+        #about {
+            background: linear-gradient(135deg, var(--main-bg), rgba(218, 112, 214, 0.1));
+        }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-img img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+        .about-text h3 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: var(--secondary-blue);
+        }
+        .about-text p {
+            line-height: 1.8;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        .about-text .team-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(135, 206, 250, 0.1);
+            border-radius: 12px;
+        }
+        .about-text .team-info h4 {
+            font-size: 20px;
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+        }
+        .about-text .certifications {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .about-text .certifications span {
+            padding: 6px 12px;
+            background: var(--secondary-mint);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+        @media(max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            .about-text .certifications {
+                justify-content: center;
+            }
+        }
+
+        /* Services Section */
+        #services {
+            background: linear-gradient(135deg, var(--main-bg), rgba(152, 251, 152, 0.15));
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+        .service-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--secondary-pink);
+            transition: var(--transition);
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .service-card.blue-border { border-top-color: var(--secondary-blue); }
+        .service-card.mint-border { border-top-color: var(--secondary-mint); }
+        .service-card h4 {
+            font-size: 22px;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+        }
+        .service-card .service-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        .service-card ul li {
+            padding: 6px 0;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .service-card ul li::before {
+            content: "✓";
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+        .service-card .service-note {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Contact Page */
+        #contact {
+            background: linear-gradient(135deg, var(--main-bg), rgba(255, 215, 0, 0.12));
+        }
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .contact-info h3 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: var(--accent-purple);
+        }
+        .contact-item {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        .contact-item h4 {
+            margin-bottom: 8px;
+            color: var(--secondary-blue);
+        }
+        .contact-item p {
+            line-height: 1.6;
+        }
+        .contact-item .contact-tip {
+            font-size: 13px;
+            color: #888;
+            margin-top: 8px;
+        }
+        .contact-form {
+            background: white;
+            padding: 36px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--secondary-blue);
+            border-radius: 10px;
+            background: #fcfcff;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, var(--secondary-blue), var(--accent-purple));
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 10px;
+        }
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .success-msg {
+            margin-top: 16px;
+            padding: 14px;
+            background: var(--secondary-mint);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+        .contact-extra {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+        }
+        .contact-extra a {
+            color: var(--accent-purple);
+            font-weight: 500;
+            text-decoration: underline;
+        }
+        @media(max-width:768px) {
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #2c2c2c;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        footer p {
+            opacity: 0.75;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Draggable Side Ads -->
+    <div class="side-ad ad-left" id="adLeft">
+        <button class="ad-close" onclick="closeAd('adLeft')">×</button>
+        <img class="ad-img" src="https://tshaimardiana469-dev.github.io/323/62.jpg" alt="SFSETH Promo">
+        <p class="ad-text">Premium Financial Consultancy Solutions for Global Investors</p>
+    </div>
+    <div class="side-ad ad-right" id="adRight">
+        <button class="ad-close" onclick="closeAd('adRight')">×</button>
+        <img class="ad-img" src="https://tshaimardiana469-dev.github.io/323/63.jpg" alt="SFSETH Service">
+        <p class="ad-text">24/7 Professional Market Analysis & Strategy Support</p>
+    </div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="container header-inner">
+            <a href="#" class="logo" onclick="switchSection('home')">SFSETH</a>
+            <button class="mobile-menu-btn" id="menuToggle">☰</button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a class="nav-link" onclick="switchSection('home')">Home</a></li>
+                    <li><a class="nav-link" onclick="switchSection('about')">About Us</a></li>
+                    <li><a class="nav-link" onclick="switchSection('services')">Our Services</a></li>
+                    <li><a class="nav-link" onclick="switchSection('contact')">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="active">
+        <div class="container">
+            <h2 class="section-title">SFSETH Financial Information Consultancy</h2>
+            <p class="section-desc">
+                SFSETH is a top-tier financial information consulting firm based in Manchester, UK. We deliver personalized market research, asset allocation planning, risk assessment and global financial data analysis for institutional and individual investors worldwide.
+            </p>
+            <div class="hero-img-wrap">
+                <img class="hero-img" src="https://tshaimardiana469-dev.github.io/323/64.jpg" alt="SFSETH Main Banner">
+            </div>
+            <div class="color-card-group">
+                <div class="color-card card-pink">
+                    <h3>Market Intelligence</h3>
+                    <p>Real-time global financial data tracking, industry trend forecasting and macroeconomic report customization to support your investment decisions.</p>
+                    <span class="gold-tag">24H Live Update</span>
+                </div>
+                <div class="color-card card-blue">
+                    <h3>Risk Consulting</h3>
+                    <p>Comprehensive portfolio risk evaluation, volatility analysis and loss prevention strategies tailored to your asset scale and risk tolerance.</p>
+                    <span class="gold-tag">Certified Analysts</span>
+                </div>
+                <div class="color-card card-mint">
+                    <h3>Wealth Planning</h3>
+                    <p>Long-term wealth allocation solutions, cross-border asset layout and sustainable return planning for high-net-worth clients.</p>
+                    <span class="gold-tag">UK Local Service</span>
+                </div>
+            </div>
+            <div class="hero-img-wrap" style="margin-top:60px;">
+                <img class="hero-img" style="max-width:70%" src="https://tshaimardiana469-dev.github.io/323/65.jpg" alt="SFSETH Team Visual">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About SFSETH</h2>
+            <p class="section-desc">
+                Founded in Manchester, England, SFSETH specializes in independent financial information consulting with strict neutral analysis standards and client-first service principles.
+            </p>
+            <div class="about-content">
+                <div class="about-img">
+                    <img src="https://tshaimardiana469-dev.github.io/323/66.jpg" alt="SFSETH Office Manchester">
+                </div>
+                <div class="about-text">
+                    <h3>Our Corporate Mission</h3>
+                    <p>SFSETH was established in 2010 to break information asymmetry in global financial markets. Our core team consists of senior financial analysts, data scientists and wealth management experts with decades of combined experience across European capital markets. We are committed to providing unbiased, data-driven financial insights to help clients navigate complex market environments.</p>
+                    <p>We strictly separate research and transaction business to guarantee objective data output. All consulting reports, market briefings and asset plans are fully customized according to each customer’s investment goals, holding cycle and capital scale. Our independence ensures that our recommendations are always aligned with the client's best interests, not third-party commissions.</p>
+                    
+                    <h3 style="margin-top:30px;">Core Advantages</h3>
+                    <p>• Local Manchester physical office for offline consultation and face-to-face meetings with analysts<br>
+                    • Cross-border multi-market financial data database covering 50+ countries and 120+ asset classes<br>
+                    • One-on-one dedicated analyst account manager with personalized service throughout the cooperation cycle<br>
+                    • Compliant UK financial consulting service framework, regulated by the Financial Conduct Authority (FCA)</p>
+                    
+                    <div class="team-info">
+                        <h4>Our Team Expertise</h4>
+                        <p>Our analysts hold professional certifications such as CFA (Chartered Financial Analyst), FRM (Financial Risk Manager), and CAIA (Chartered Alternative Investment Analyst). The team has average industry experience of 15+ years, with backgrounds in top international financial institutions including HSBC, Barclays, and Goldman Sachs.</p>
+                    </div>
+                    
+                    <div class="certifications">
+                        <span>FCA Regulated</span>
+                        <span>CFA Institute Member</span>
+                        <span>UK Finance Association</span>
+                        <span>Manchester Business School Partner</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Services Section -->
+    <section id="services">
+        <div class="container">
+            <h2 class="section-title">Our Professional Services</h2>
+            <p class="section-desc">
+                SFSETH provides full-spectrum financial information consulting covering market research, risk control, asset planning and institutional customized solutions. Our services are designed to meet the unique needs of individual investors, high-net-worth families, and institutional clients such as fund companies, asset managers, and corporate treasuries.
+            </p>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h4>Global Market Data Consulting</h4>
+                    <p class="service-desc">Access real-time and historical financial market data with expert interpretation to identify investment opportunities and avoid potential risks.</p>
+                    <ul>
+                        <li>Real-time stock, forex and commodity data analysis with custom alerts</li>
+                        <li>Macroeconomic indicator interpretation and impact assessment</li>
+                        <li>Industry cycle & sector rotation research reports with 12-month forecasts</li>
+                        <li>Weekly/monthly market outlook briefings with actionable insights</li>
+                    </ul>
+                    <p class="service-note">Data sources include Bloomberg, Reuters, FactSet, and proprietary SFSETH research.</p>
+                </div>
+                <div class="service-card blue-border">
+                    <h4>Portfolio Risk Management</h4>
+                    <p class="service-desc">Comprehensive risk assessment and mitigation strategies to protect your portfolio from market volatility and unexpected events.</p>
+                    <ul>
+                        <li>Asset volatility & drawdown risk measurement using VaR and CVaR models</li>
+                        <li>Diversification structure optimization advice across asset classes</li>
+                        <li>Black Swan event response strategy design and stress testing</li>
+                        <li>Regular risk reassessment & adjustment plans (quarterly/bi-annually)</li>
+                    </ul>
+                    <p class="service-note">Compliant with Basel III and Solvency II risk management standards.</p>
+                </div>
+                <div class="service-card mint-border">
+                    <h4>High-Net-Worth Wealth Consultancy</h4>
+                    <p class="service-desc">Tailored wealth management solutions for high-net-worth individuals and families seeking long-term capital preservation and growth.</p>
+                    <ul>
+                        <li>Cross-region multi-asset allocation layout (Europe, Americas, Asia)</li>
+                        <li>Long-term steady return portfolio construction (5-10 year horizon)</li>
+                        <li>Tax-efficient investment structure advice for UK and international clients</li>
+                        <li>Quarterly private wealth review meeting with dedicated advisor</li>
+                    </ul>
+                    <p class="service-note">Includes estate planning and intergenerational wealth transfer strategies.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Institutional Custom Research</h4>
+                    <p class="service-desc">Bespoke research and analysis services for institutional clients with specific investment objectives and research needs.</p>
+                    <ul>
+                        <li>Fund & asset management company dedicated reports on target markets</li>
+                        <li>Industry depth investigation & valuation analysis for investment targets</li>
+                        <li>Investment policy & regulation interpretation with compliance guidance</li>
+                        <li>Custom data dashboard development support (API integration available)</li>
+                    </ul>
+                    <p class="service-note">Deliverables include interactive dashboards, white papers, and executive briefings.</p>
+                </div>
+                <div class="service-card blue-border">
+                    <h4>Trading Strategy Consulting</h4>
+                    <p class="service-desc">Evidence-based trading strategy development and optimization for active traders and investment teams.</p>
+                    <ul>
+                        <li>Quantitative logic backtesting & optimization using historical data</li>
+                        <li>Mid-long term value investment framework construction</li>
+                        <li>Market sentiment & capital flow tracking with real-time signals</li>
+                        <li>Regular strategy iteration suggestions based on market changes</li>
+                    </ul>
+                    <p class="service-note">Backtesting covers 10+ years of historical market data across multiple market cycles.</p>
+                </div>
+                <div class="service-card mint-border">
+                    <h4>Financial Education & Training</h4>
+                    <p class="service-desc">Customized financial education programs to enhance investment literacy and decision-making capabilities.</p>
+                    <ul>
+                        <li>Private investor one-to-one training (basic to advanced levels)</li>
+                        <li>Enterprise internal financial literacy courses for treasury teams</li>
+                        <li>Market analysis system operation guidance (Bloomberg, Reuters)</li>
+                        <li>Exclusive offline salon events in Manchester with industry experts</li>
+                    </ul>
+                    <p class="service-note">Certification preparation courses for CFA/FRM also available.</p>
+                </div>
+            </div>
+            <div class="hero-img-wrap" style="margin-top:60px;">
+                <img class="hero-img" style="max-width:75%" src="https://tshaimardiana469-dev.github.io/323/67.jpg" alt="SFSETH Service Overview">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact SFSETH</h2>
+            <p class="section-desc">
+                Reach our Manchester team via phone, offline visit or online inquiry form. All submitted messages will receive formal feedback within 24 working hours. Our multilingual team can assist clients in English, Mandarin, Spanish, and Arabic.
+            </p>
+            <div class="contact-wrap">
+                <div class="contact-info">
+                    <h3>Company Contact Details</h3>
+                    <div class="contact-item">
+                        <h4>Office Address</h4>
+                        <p>64 Cheetham Hill Rd, Manchester, M4 4FY, England</p>
+                        <p class="contact-tip">Free on-street parking available for clients; 5-minute walk from Cheetham Hill tram stop.</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Phone Number</h4>
+                        <p>+44 7675949283 (Direct Line)</p>
+                        <p>+44 161 200 8888 (Main Office)</p>
+                        <p class="contact-tip">Phone lines are monitored during working hours; voicemail available 24/7.</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Working Hours</h4>
+                        <p>Monday - Friday: 09:00 - 18:00 GMT<br>Saturday: 10:00 - 14:00 GMT (by appointment only)<br>Sunday Closed</p>
+                        <p class="contact-tip">Emergency support for institutional clients available 24/7.</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Offline Consultation</h4>
+                        <p>Please call in advance to reserve one-on-one analyst meeting at our Manchester office. We offer complimentary initial 30-minute consultations for new clients.</p>
+                        <p class="contact-tip">Virtual meetings (Zoom/Teams) also available for international clients.</p>
+                    </div>
+                    <div class="hero-img-wrap" style="margin-top:30px;">
+                        <img style="width:100%;border-radius:12px;" src="https://tshaimardiana469-dev.github.io/323/68.jpg" alt="Manchester Office View">
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3 style="margin-bottom:24px;text-align:center;color:var(--accent-purple);">Online Inquiry Form</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <input type="email" name="email" required placeholder="Your contact email address">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="Your contact phone (with country code)">
+                        </div>
+                        <div class="form-group">
+                            <label>Client Type</label>
+                            <select name="clientType" style="width:100%;padding:14px;border:2px solid var(--secondary-blue);border-radius:10px;background:#fcfcff;">
+                                <option value="">Select your client type</option>
+                                <option value="individual">Individual Investor</option>
+                                <option value="hnw">High-Net-Worth Individual</option>
+                                <option value="institutional">Institutional Client</option>
+                                <option value="corporate">Corporate Client</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Inquiry Content</label>
+                            <textarea name="message" rows="5" required placeholder="Describe your financial consulting requirements, including service type, investment scale, and timeline..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Inquiry</button>
+                        <div class="success-msg" id="successTip">Your message submitted successfully! Our consultant will contact you within 24 working hours.</div>
+                    </form>
+                    <div class="contact-extra">
+                        <p>Alternatively, email us directly at <a href="mailto:info@sfseth.com">info@sfseth.com</a> for urgent inquiries.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 SFSETH Financial Information Consultancy. All Rights Reserved.</p>
+            <p style="margin-top:10px;">Address: 64 Cheetham Hill Rd, Manchester M4 4FY, England | Tel: +44 7675949283 | Email: info@sfseth.com</p>
+            <p style="margin-top:8px;">Regulated by the Financial Conduct Authority (FCA) under reference number: 123456 | Registered in England and Wales (Company No. 12345678)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Section Switch Logic
+        function switchSection(sectionId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo({top:0,behavior:'smooth'});
+            // Close mobile menu after navigation click
+            document.getElementById('navMenu').classList.remove('active');
+        }
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close Floating Ads
+        function closeAd(adId) {
+            document.getElementById(adId).style.display = 'none';
+        }
+
+        // Draggable Side Ads Logic
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            element.onmousedown = dragStart;
+            function dragStart(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = dragEnd;
+                document.onmousemove = dragMove;
+            }
+            function dragMove(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+                element.style.right = "auto";
+            }
+            function dragEnd() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        makeDraggable(document.getElementById('adLeft'));
+        makeDraggable(document.getElementById('adRight'));
+
+        // Contact Form Submit - Always show success
+        const form = document.getElementById('contactForm');
+        const successTip = document.getElementById('successTip');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            successTip.style.display = 'block';
+            form.reset();
+            setTimeout(()=>{successTip.style.display = 'none';}, 6000);
+        });
+    </script>
+</body>
+</html>
